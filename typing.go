@@ -28,7 +28,7 @@ type Service[T interface{}] interface {
 type Storage interface {
 	Get(ctx context.Context, key string) (string, error)
 	Set(ctx context.Context, key string, value interface{}) error
-	Exists(ctx context.Context, key string) (bool, error)
+	Exist(ctx context.Context, key string) (bool, error)
 }
 
 // Config defines the configuration for the service.

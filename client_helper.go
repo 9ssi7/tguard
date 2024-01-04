@@ -18,7 +18,7 @@ func (g *guard[T]) unmarshal(bytes string) ([]Data[T], error) {
 }
 
 func (g *guard[T]) getData(ctx context.Context) ([]Data[T], error) {
-	isExists, err := g.storage.Exists(ctx, g.storeKey)
+	isExists, err := g.storage.Exist(ctx, g.storeKey)
 	if err != nil {
 		return nil, err
 	}
