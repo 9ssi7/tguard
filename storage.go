@@ -29,3 +29,13 @@ func (m *memoryStorage) Set(ctx context.Context, key string, value interface{}) 
 	m.data[key] = value
 	return nil
 }
+
+func (m *memoryStorage) Exists(ctx context.Context, key string) (bool, error) {
+	if m.data == nil {
+		return false, nil
+	}
+	if _, ok := m.data[key]; ok {
+		return true, nil
+	}
+	return false, nil
+}

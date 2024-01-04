@@ -1,4 +1,4 @@
-# tguard Package
+# tguard (time guard) Package
 
 The `tguard` package is designed to manage data with specific timeouts. It offers functionalities to start, cancel, and manage data based on their time-to-live (TTL) settings.
 
@@ -6,6 +6,23 @@ The `tguard` package is designed to manage data with specific timeouts. It offer
 
 ```bash
 go get github.com/9ssi7/tguard
+```
+
+## Potential Use-Cases
+
+### Real-World Example: Ticketing System
+
+The `tguard` package can be used in a ticketing system to manage reservations with a specific time limit. Here's a Mermaid diagram illustrating the flow:
+
+```mermaid
+graph TD
+    A[Start] --> B[Request Ticket]
+    B --> C[Add to tguard]
+    C --> D[Process Payment]
+    D --> E[Confirm Reservation]
+    E --> F[End]
+    C -->|Timeout| G[Cancel Reservation]
+    G --> F
 ```
 
 ## Documentation
@@ -120,23 +137,6 @@ func main() {
 	}
 	_ = g.Start(ctx, data)
 }
-```
-
-## Potential Use-Cases
-
-### Real-World Example: Ticketing System
-
-The `tguard` package can be used in a ticketing system to manage reservations with a specific time limit. Here's a Mermaid diagram illustrating the flow:
-
-```mermaid
-graph TD
-    A[Start] --> B[Request Ticket]
-    B --> C[Add to tguard]
-    C --> D[Process Payment]
-    D --> E[Confirm Reservation]
-    E --> F[End]
-    C -->|Timeout| G[Cancel Reservation]
-    G --> F
 ```
 
 ## Contributing
