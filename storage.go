@@ -30,7 +30,7 @@ func (m *memoryStorage) Set(ctx context.Context, key string, value interface{}) 
 	return nil
 }
 
-func (m *memoryStorage) Exists(ctx context.Context, key string) (bool, error) {
+func (m *memoryStorage) Exist(ctx context.Context, key string) (bool, error) {
 	if m.data == nil {
 		return false, nil
 	}
