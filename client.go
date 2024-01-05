@@ -6,18 +6,23 @@ import (
 )
 
 type guard[T any] struct {
-	checker  IdentityChecker[T]
-	fallback FallbackFunc[T]
-	ttl      time.Duration
-	interval time.Duration
-	storage  Storage
-	storeKey string
+	checker     IdentityChecker[T]
+	fallback    FallbackFunc[T]
+	ttl         time.Duration
+	interval    time.Duration
+	storage     Storage
+	storeKey    string
+	standartTTL bool
 }
 
-func (g *guard[T]) Start(ctx context.Context, data T) error {
+func (g *guard[T]) Start(ctx context.Context, data T, ttls ...time.Duration) error {
+	ttl := g.ttl
+	if len(ttls) > 0 && !g.standartTTL {
+		ttl = ttls[0]
+	}
 	cacheItem := Data[T]{
 		Original:   data,
-		ExpireTime: time.Now().Add(g.ttl).Unix(),
+		ExpireTime: time.Now().Add(ttl).Unix(),
 	}
 	current, err := g.getData(ctx)
 	if err != nil {

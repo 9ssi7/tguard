@@ -19,7 +19,7 @@ type IdentityChecker[T interface{}] func(id string, data T) bool
 
 // Service is the interface that defines the core functionality.
 type Service[T interface{}] interface {
-	Start(ctx context.Context, data T) error
+	Start(ctx context.Context, data T, ttl ...time.Duration) error
 	Cancel(ctx context.Context, id string) error
 	Connect(ctx context.Context)
 }
@@ -39,4 +39,5 @@ type Config[T interface{}] struct {
 	Interval        time.Duration      // The interval for checking timeouts. default: 1 minute. (time.Minute * 1)
 	Storage         Storage            // The storage backend. default: memoryStorage
 	StorageKey      string             // The key under which data will be stored. default: "tguard_default_key"
+	WithStandardTTL bool               // Whether to use all data with the same expiration time. default: true
 }

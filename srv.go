@@ -26,12 +26,13 @@ func New[T any](cnf Config[T]) Service[T] {
 		cnf.Interval = time.Minute * 1
 	}
 	return &guard[T]{
-		checker:  cnf.IdentityChecker,
-		fallback: cnf.Fallback,
-		ttl:      cnf.DefaultTTL,
-		interval: cnf.Interval,
-		storage:  cnf.Storage,
-		storeKey: cnf.StorageKey,
+		checker:     cnf.IdentityChecker,
+		fallback:    cnf.Fallback,
+		ttl:         cnf.DefaultTTL,
+		interval:    cnf.Interval,
+		storage:     cnf.Storage,
+		storeKey:    cnf.StorageKey,
+		standartTTL: cnf.WithStandardTTL,
 	}
 }
 
