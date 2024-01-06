@@ -39,7 +39,11 @@ func (g *guard[T]) Cancel(ctx context.Context, id string) error {
 	}
 	for i, v := range current {
 		if g.checker(id, v.Original) {
-			current = append(current[:i], current[i+1:]...)
+			if i == len(current)-1 {
+				current = current[:i]
+			} else {
+				current = append(current[:i], current[i+1:]...)
+			}
 			return g.saveData(ctx, current)
 		}
 	}
