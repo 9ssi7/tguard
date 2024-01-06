@@ -61,7 +61,12 @@ func (g *guard[T]) check(ctx context.Context) {
 		if v.ExpireTime < now {
 			isChanged = true
 			g.fallback(v.Original)
-			current = append(current[:i], current[i+1:]...)
+			if i == len(current)-1 {
+				current = current[:i]
+				break
+			} else {
+				current = append(current[:i], current[i+1:]...)
+			}
 		}
 	}
 	if isChanged {
