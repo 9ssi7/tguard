@@ -15,6 +15,10 @@ type guard[T any] struct {
 	standartTTL bool
 }
 
+func (g *guard[T]) GetData(ctx context.Context) ([]Data[T], error) {
+	return g.getData(ctx)
+}
+
 func (g *guard[T]) Start(ctx context.Context, data T, ttls ...time.Duration) error {
 	ttl := g.ttl
 	if len(ttls) > 0 && !g.standartTTL {
@@ -37,14 +41,12 @@ func (g *guard[T]) Cancel(ctx context.Context, id string) error {
 	if err != nil {
 		return err
 	}
+	maxIdx := len(current) - 1
 	for i, v := range current {
 		if g.checker(id, v.Original) {
-			if i == len(current)-1 {
-				current = current[:i]
-			} else {
-				current = append(current[:i], current[i+1:]...)
-			}
-			return g.saveData(ctx, current)
+			current, _ = removeSoftItem[T](current, i, maxIdx)
+			g.saveData(ctx, current)
+			break
 		}
 	}
 	return nil
@@ -57,16 +59,12 @@ func (g *guard[T]) check(ctx context.Context) {
 	}
 	isChanged := false
 	now := time.Now().Unix()
+	maxIdx := len(current) - 1
 	for i, v := range current {
 		if v.ExpireTime < now {
 			isChanged = true
 			g.fallback(v.Original)
-			if i == len(current)-1 {
-				current = current[:i]
-				break
-			} else {
-				current = append(current[:i], current[i+1:]...)
-			}
+			current, maxIdx = removeSoftItem[T](current, i, maxIdx)
 		}
 	}
 	if isChanged {

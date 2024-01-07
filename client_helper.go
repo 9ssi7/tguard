@@ -39,3 +39,13 @@ func (g *guard[T]) saveData(ctx context.Context, data []Data[T]) error {
 	}
 	return g.storage.Set(ctx, g.storeKey, bytes)
 }
+
+func removeSoftItem[T any](slice []Data[T], s int, maxIdx int) ([]Data[T], int) {
+	if 0 > s || s > maxIdx {
+		return slice, maxIdx
+	}
+	if s == maxIdx {
+		return slice[:s], maxIdx - 1
+	}
+	return append(slice[:s], slice[s+1:]...), maxIdx - 1
+}

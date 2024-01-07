@@ -21,6 +21,7 @@ type IdentityChecker[T interface{}] func(id string, data T) bool
 type Service[T interface{}] interface {
 	Start(ctx context.Context, data T, ttl ...time.Duration) error
 	Cancel(ctx context.Context, id string) error
+	GetData(ctx context.Context) ([]Data[T], error)
 	Connect(ctx context.Context)
 }
 

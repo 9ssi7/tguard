@@ -13,6 +13,39 @@ type TestData struct {
 
 func TestTimeGuard(t *testing.T) {
 
+	t.Run("removeSoftItem test", func(t *testing.T) {
+		slice := []Data[TestData]{
+			{
+				ExpireTime: time.Now().Add(time.Millisecond * 50).Unix(),
+				Original: TestData{
+					Id:   "1",
+					Name: "test",
+				},
+			},
+			{
+				ExpireTime: time.Now().Add(time.Millisecond * 30).Unix(),
+				Original: TestData{
+					Id:   "2",
+					Name: "test 2",
+				},
+			},
+			{
+				ExpireTime: time.Now().Add(time.Millisecond * 30).Unix(),
+				Original: TestData{
+					Id:   "3",
+					Name: "test 3",
+				},
+			},
+		}
+		slice, maxIdx := removeSoftItem(slice, 0, len(slice)-1)
+		if len(slice) != 2 {
+			t.Errorf("invalid slice length")
+		}
+		if maxIdx != 1 {
+			t.Errorf("invalid maxIdx")
+		}
+	})
+
 	identityChecker := func(id string, data TestData) bool {
 		return id == data.Id
 	}
@@ -37,7 +70,6 @@ func TestTimeGuard(t *testing.T) {
 				},
 			},
 		},
-
 		{
 			name:     "test cancel before timeout",
 			ttl:      time.Millisecond * 200,
@@ -47,6 +79,47 @@ func TestTimeGuard(t *testing.T) {
 				{
 					Id:   "2",
 					Name: "test",
+				},
+			},
+		},
+		{
+			name:     "test timeout with multiple data",
+			ttl:      time.Millisecond * 200,
+			interval: time.Millisecond * 100,
+			sleep:    time.Millisecond * 6000,
+			cancel:   false,
+			data: []TestData{
+				{
+					Id:   "2",
+					Name: "test",
+				},
+				{
+					Id:   "3",
+					Name: "test 2",
+				},
+				{
+					Id:   "4",
+					Name: "test 3",
+				},
+				{
+					Id:   "5",
+					Name: "test 4",
+				},
+				{
+					Id:   "6",
+					Name: "test 5",
+				},
+				{
+					Id:   "7",
+					Name: "test 6",
+				},
+				{
+					Id:   "8",
+					Name: "test 7",
+				},
+				{
+					Id:   "9",
+					Name: "test 8",
 				},
 			},
 		},
