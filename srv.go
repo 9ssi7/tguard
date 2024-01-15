@@ -25,8 +25,12 @@ func New[T any](cnf Config[T]) Service[T] {
 	if cnf.Interval == 0 {
 		cnf.Interval = time.Minute * 1
 	}
+	if cnf.Now == nil {
+		cnf.Now = time.Now
+	}
 	return &guard[T]{
 		checker:     cnf.IdentityChecker,
+		nowFunc:     cnf.Now,
 		fallback:    cnf.Fallback,
 		ttl:         cnf.DefaultTTL,
 		interval:    cnf.Interval,

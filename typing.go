@@ -14,6 +14,8 @@ type Data[T interface{}] struct {
 // FallbackFunc defines the fallback mechanism for timed-out data.
 type FallbackFunc[T interface{}] func(data T)
 
+type NowFunc func() time.Time
+
 // IdentityChecker is a function type used to authenticate data.
 type IdentityChecker[T interface{}] func(id string, data T) bool
 
@@ -36,6 +38,7 @@ type Storage interface {
 type Config[T interface{}] struct {
 	Fallback        FallbackFunc[T]    // The fallback function for timed-out data.
 	IdentityChecker IdentityChecker[T] // The function to check the identity of data.
+	Now             NowFunc            // The function to get the current time. default: time.Now
 	DefaultTTL      time.Duration      // The default time-to-live for data. default: 5 minutes. (time.Minute * 5)
 	Interval        time.Duration      // The interval for checking timeouts. default: 1 minute. (time.Minute * 1)
 	Storage         Storage            // The storage backend. default: memoryStorage

@@ -172,6 +172,7 @@ func main() {
 		IdentityChecker: identityChecker,
 		Interval:        time.Second * 1,
 		WithStandardTTL: false,
+		Now:		     time.Now, // you can change it for location time
 	}
 
 	// Create and start the service

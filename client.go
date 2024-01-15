@@ -8,6 +8,7 @@ import (
 type guard[T any] struct {
 	checker     IdentityChecker[T]
 	fallback    FallbackFunc[T]
+	nowFunc     NowFunc
 	ttl         time.Duration
 	interval    time.Duration
 	storage     Storage
@@ -58,7 +59,7 @@ func (g *guard[T]) check(ctx context.Context) {
 		return
 	}
 	isChanged := false
-	now := time.Now().Unix()
+	now := g.nowFunc().Unix()
 	maxIdx := len(current) - 1
 	for i, v := range current {
 		if v.ExpireTime < now {
